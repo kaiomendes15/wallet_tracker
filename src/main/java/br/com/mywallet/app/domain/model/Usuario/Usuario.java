@@ -1,6 +1,8 @@
-package br.com.mywallet.app.domain.model;
+package br.com.mywallet.app.domain.model.Usuario;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
@@ -11,12 +13,16 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
-    @Column(nullable = false)
+
+    @NotBlank(message = "O e-mail é obrigatório")
+    @Email(message = "Formato de e-mail inválido")
+    @Column(unique = true)
     private String email;
-    @Column(nullable = false)
+
+    @NotBlank
     private String hashSenha;
-    @Column(nullable = true)
+
     private Double rendaMensal;
 }
