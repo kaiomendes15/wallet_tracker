@@ -27,4 +27,14 @@ public class UsuarioService {
 
         return usuario;
     }
+
+    public Optional<Usuario> consultarUsuarioPorId(Long userId) {
+        Optional<Usuario> usuario =  usuarioRepository.findById(userId);
+
+        if (usuario.isEmpty()) { // se o usuario for null
+            throw new ResourceNotFoundException("Usuário com id '" + userId + "' nâo foi encontrado.");
+        }
+
+        return usuario;
+    }
 }
