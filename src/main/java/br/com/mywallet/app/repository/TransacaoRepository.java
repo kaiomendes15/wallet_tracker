@@ -2,7 +2,7 @@ package br.com.mywallet.app.repository;
 
 import br.com.mywallet.app.domain.model.Categoria;
 import br.com.mywallet.app.domain.model.Transacao.Transacao;
-import br.com.mywallet.app.domain.model.enums.TipoTransacao;
+import br.com.mywallet.app.domain.enums.TipoTransacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
