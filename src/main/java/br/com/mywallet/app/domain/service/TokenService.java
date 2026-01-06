@@ -1,8 +1,16 @@
 package br.com.mywallet.app.domain.service;
 
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
-import lombok.Value;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class TokenService {
@@ -16,7 +24,7 @@ public class TokenService {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT
                     .create()
-                    .withIssuer("skooby-doo-livro")
+                    .withIssuer("my-wallet")
                     .withSubject(usuario.getEmail())
                     .withClaim("role", usuario.getRole().name())
                     .withExpiresAt(generateExpirationDate())
@@ -24,7 +32,7 @@ public class TokenService {
 
             return token;
         } catch (JWTCreationException exception) {
-            throw new JWTTokenException("Erro ao gerar o token JWT.");
+            throw new RuntimeException("Erro ao gerar o token JWT.", exception);
         }
     }
 
@@ -32,7 +40,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
-                    .withIssuer("skooby-doo-livro")
+                    .withIssuer("my-wallet")
                     .build()
                     .verify(token)
                     .getSubject();
