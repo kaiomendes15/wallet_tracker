@@ -1,4 +1,4 @@
 package br.com.mywallet.app.domain.model.Usuario;
 
-public class AuthenticationResponseDTO {
+public record AuthenticationResponseDTO(String token, Long id) {
 }

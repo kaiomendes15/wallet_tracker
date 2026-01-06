@@ -1,4 +1,6 @@
 package br.com.mywallet.app.domain.model.Usuario;
 
-public class RegisterDTO {
+import br.com.mywallet.app.domain.enums.UserRole;
+
+public record RegisterDTO(String email, String nome, String senha, Double rendaMensal) {
 }
