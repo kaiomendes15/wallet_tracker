@@ -1,6 +1,6 @@
 package br.com.mywallet.app.controller;
 
-import br.com.mywallet.app.domain.model.Categoria.CategoriaDTO;
+import br.com.mywallet.app.domain.model.Categoria.CategoriaResponseDTO;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import br.com.mywallet.app.domain.service.CategoriaService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +20,10 @@ public class CategoriaController {
     private final CategoriaService categoriaService;
 
     @GetMapping("me")
-    public ResponseEntity<List<CategoriaDTO>> listarCategorias(Authentication authentication) {
+    public ResponseEntity<List<CategoriaResponseDTO>> listarCategorias(Authentication authentication) {
         Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
 
-        List<CategoriaDTO> categorias = categoriaService.getAllCategorias(usuarioLogado.getId());
+        List<CategoriaResponseDTO> categorias = categoriaService.getAllCategorias(usuarioLogado.getId());
 
         return ResponseEntity.ok(categorias);
     }
