@@ -1,6 +1,6 @@
 package br.com.mywallet.app.repository;
 
-import br.com.mywallet.app.domain.model.Categoria;
+import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Transacao.Transacao;
 import br.com.mywallet.app.domain.enums.TipoTransacao;
 import org.springframework.data.jpa.repository.JpaRepository;

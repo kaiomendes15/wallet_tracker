@@ -1,6 +1,6 @@
 package br.com.mywallet.app.domain.model.Transacao;
 
-import br.com.mywallet.app.domain.model.Categoria;
+import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import br.com.mywallet.app.domain.enums.TipoTransacao;
 import jakarta.persistence.*;
