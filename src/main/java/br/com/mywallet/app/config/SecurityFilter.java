@@ -24,37 +24,33 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-
-    public SecurityFilter(TokenService tokenService) {
-        this.tokenService = tokenService;
-    }
+    // REMOVI O CONSTRUTOR MANUAL QUE ESTAVA AQUI.
+    // Motivo: Ele recebia apenas o TokenService e deixava o UsuarioRepository nulo se o Spring optasse por usá-lo.
+    // Como você já anotou os campos com @Autowired, não precisa do construtor manual.
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = recoverToken(request);
+
         if (token != null) {
-            String subject = tokenService.validateToken(token); // email do
-            // usuario
+            String subject = tokenService.validateToken(token);
             UserDetails user = usuarioRepository.findByEmail(subject);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(user,
-                            null, user.getAuthorities());
+            // CORREÇÃO PRINCIPAL: Verificamos se o usuário foi encontrado
+            if (user != null) {
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authentication); // salva o usuario no contexto da autenticacao
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
 
-        filterChain.doFilter(request, response); // terminou esse filtro,
-        // manda para o proximo
-        // isso aqui é basicamente manusear um middleware no node
-        // btw mt mais facil la
+        filterChain.doFilter(request, response);
     }
 
     private String recoverToken(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
-
         if (authHeader == null) return null;
-
         return authHeader.replace("Bearer ", "");
     }
 }
