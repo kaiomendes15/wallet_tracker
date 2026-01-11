@@ -1,4 +1,4 @@
-package br.com.mywallet.app.domain.model;
+package br.com.mywallet.app.domain.model.Categoria;
 
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import jakarta.persistence.*;
