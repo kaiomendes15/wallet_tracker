@@ -1,4 +1,4 @@
-package br.com.mywallet.app.domain.model.exceptions;
+package br.com.mywallet.app.domain.exceptions;
 
 public class RegraDeNegocioException extends RuntimeException {
     public RegraDeNegocioException(String message) {

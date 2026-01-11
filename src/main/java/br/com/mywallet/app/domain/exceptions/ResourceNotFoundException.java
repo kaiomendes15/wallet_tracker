@@ -1,4 +1,4 @@
-package br.com.mywallet.app.domain.model.exceptions;
+package br.com.mywallet.app.domain.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
     public ResourceNotFoundException(String message) {

@@ -4,15 +4,14 @@ import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Categoria.CategoriaRequestDTO;
 import br.com.mywallet.app.domain.model.Categoria.CategoriaResponseDTO;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
-import br.com.mywallet.app.domain.model.exceptions.RegraDeNegocioException;
-import br.com.mywallet.app.domain.model.exceptions.ResourceNotFoundException;
+import br.com.mywallet.app.domain.exceptions.RegraDeNegocioException;
+import br.com.mywallet.app.domain.exceptions.ResourceNotFoundException;
 import br.com.mywallet.app.repository.CategoriaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

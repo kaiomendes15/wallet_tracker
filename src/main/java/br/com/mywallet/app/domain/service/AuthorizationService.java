@@ -5,7 +5,7 @@ import br.com.mywallet.app.domain.model.Usuario.AuthenticationRequestDTO;
 import br.com.mywallet.app.domain.model.Usuario.AuthenticationResponseDTO;
 import br.com.mywallet.app.domain.model.Usuario.RegisterDTO;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
-import br.com.mywallet.app.domain.model.exceptions.RegraDeNegocioException;
+import br.com.mywallet.app.domain.exceptions.RegraDeNegocioException;
 import br.com.mywallet.app.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

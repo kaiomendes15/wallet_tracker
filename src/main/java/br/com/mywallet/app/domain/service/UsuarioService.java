@@ -2,10 +2,9 @@ package br.com.mywallet.app.domain.service;
 
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import br.com.mywallet.app.domain.model.Usuario.UsuarioDTO;
-import br.com.mywallet.app.domain.model.exceptions.ResourceNotFoundException;
+import br.com.mywallet.app.domain.exceptions.ResourceNotFoundException;
 import br.com.mywallet.app.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
