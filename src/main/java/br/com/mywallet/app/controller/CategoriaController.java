@@ -20,7 +20,7 @@ public class CategoriaController {
 
     private final CategoriaService categoriaService;
 
-    @GetMapping("minhas-categorias")
+    @GetMapping("")
     public ResponseEntity<List<CategoriaResponseDTO>> listarCategorias(Authentication authentication) {
         Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
 
@@ -29,12 +29,35 @@ public class CategoriaController {
         return ResponseEntity.ok(categorias);
     }
 
-    @PostMapping("/criar")
+    @PostMapping("")
     public ResponseEntity<CategoriaResponseDTO> cadastrarCategoria(@RequestBody @Valid CategoriaRequestDTO data, Authentication authentication) {
         Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
 
         CategoriaResponseDTO novaCategoria = categoriaService.criarCategoria(data, usuarioLogado);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(novaCategoria);
+    }
+
+    @PutMapping("{categoriaId}")
+    public ResponseEntity<CategoriaResponseDTO> editarCategoria(
+            @RequestBody @Valid CategoriaRequestDTO updatedData,
+            Authentication authentication,
+            @PathVariable Long categoriaId
+    ) {
+        Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
+
+        CategoriaResponseDTO categoriaAtualizada = categoriaService.atualizarCategoria(updatedData, usuarioLogado, categoriaId);
+        return ResponseEntity.status(HttpStatus.OK).body(categoriaAtualizada);
+    }
+
+    @DeleteMapping("{categoriaId}")
+    public ResponseEntity excluirCategoria(
+            Authentication authentication,
+            @PathVariable Long categoriaId
+    ) {
+        Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
+        categoriaService.excluirCategoria(categoriaId, usuarioLogado);
+
+        return ResponseEntity.ok().build();
     }
 }
