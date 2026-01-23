@@ -1,6 +1,4 @@
 package br.com.mywallet.app.config;
-
-import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -48,6 +46,7 @@ public class SecurityConfig {
                         // CORREÇÃO 1: Use /** para liberar sub-rotas (CSS, JS, Login)
                         // Não precisa especificar método, libera geral para essa rota
                         .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated()
                 )
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
