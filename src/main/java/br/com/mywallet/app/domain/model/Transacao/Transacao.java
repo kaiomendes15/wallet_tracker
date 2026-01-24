@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -41,5 +42,15 @@ public class Transacao {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
+
+    // Padrão builder para evitar repetição na hora de transformar o dto na entidade.
+    public Transacao(TransacaoRequestDTO dados, Usuario usuario, Categoria categoria) {
+        this.descricao = dados.descricao();
+        this.valor = dados.valor();
+        this.data = dados.data();
+        this.tipo = dados.tipo();
+        this.usuario = usuario;
+        this.categoria = categoria;
+    }
 
 }
