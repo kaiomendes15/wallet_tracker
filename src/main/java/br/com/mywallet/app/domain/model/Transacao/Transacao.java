@@ -19,6 +19,7 @@ import java.time.LocalDate;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Transacao {
     @Id
     private Long id;
