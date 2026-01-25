@@ -8,10 +8,12 @@ import br.com.mywallet.app.domain.model.Transacao.TransacaoResponseDTO;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import br.com.mywallet.app.repository.CategoriaRepository;
 import br.com.mywallet.app.repository.TransacaoRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -49,5 +51,20 @@ public class TransacaoService {
                 transacaoSalva.getCategoria().getTitulo(),
                 transacaoSalva.getTipo()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public Page<TransacaoResponseDTO> listarTransacoes(Usuario usuarioLogado, Pageable paginacao) {
+        Page<Transacao> paginaTransacoes = repository.findByUsuarioId(usuarioLogado.getId(), paginacao);
+
+
+        return paginaTransacoes.map(t -> new TransacaoResponseDTO(
+                t.getId(),
+                t.getData(),
+                t.getDescricao(),
+                t.getValor(),
+                t.getCategoria().getTitulo(),
+                t.getTipo()
+        ));
     }
 }

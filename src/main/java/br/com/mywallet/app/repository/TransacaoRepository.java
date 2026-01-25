@@ -3,6 +3,9 @@ package br.com.mywallet.app.repository;
 import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Transacao.Transacao;
 import br.com.mywallet.app.domain.enums.TipoTransacao;
+import br.com.mywallet.app.domain.model.Usuario.Usuario;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,9 +16,11 @@ import java.util.List;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     // busca as transações de um usuário
-    List<Transacao> findByUsuarioIdOrderByDataDesc(Long usuarioId);
-    List<Transacao> findByUsuarioIdOrderByValorDesc(Long usuarioId);
-    List<Transacao> findByUsuarioIdOrderByValorAsc(Long usuarioId);
+    // O JpaRepository já sabe lidar com Pageable magicamente!
+    Page<Transacao> findByUsuarioId(Long usuarioId, Pageable pageable);
+    List<Transacao> findByUsuarioIdOrderByDataDesc(Long usuarioId, Pageable pageable);
+    List<Transacao> findByUsuarioIdOrderByValorDesc(Long usuarioId, Pageable pageable);
+    List<Transacao> findByUsuarioIdOrderByValorAsc(Long usuarioId, Pageable pageable);
 
     // filtra as transações por tipo (receitas e despesas)
     List<Transacao> findByUsuarioIdAndTipo(Long usuarioId, TipoTransacao tipo);
