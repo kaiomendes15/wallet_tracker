@@ -22,16 +22,19 @@ import java.time.LocalDate;
 @Builder
 public class Transacao {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message = "A descrição é obrigatória.") // NotBlank se for String
     private String descricao;
+
     @NotNull(message = "O valor é obrigatório.")
     @Positive(message = "O valor deve ser positivo.")
     private Double valor;
+
     @NotNull(message = "A data é obrigatória.")
     @PastOrPresent(message = "A data não pode ser futura.") // Regra de negócio via Bean Validation
     private LocalDate data;
-    @Positive(message = "Valor da transação não pode ser menor que zero.")
+
     @NotNull(message = "O tipo da transação é obrigatório.")
     @Enumerated(EnumType.STRING) // Grava "RECEITA" no banco em vez de 0 ou 1
     private TipoTransacao tipo;

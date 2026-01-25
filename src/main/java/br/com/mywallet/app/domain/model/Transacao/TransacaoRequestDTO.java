@@ -15,14 +15,13 @@ public record TransacaoRequestDTO(
         String descricao,
 
         @NotNull(message = "O valor é obrigatório.")
-        @Positive(message = "O valor deve ser positivo.")
+        @Positive(message = "Valor da transação não pode ser menor que zero.")
         Double valor,
 
         @NotNull(message = "A data é obrigatória.")
         @PastOrPresent(message = "A data não pode ser futura.")
         LocalDate data,
 
-        @Positive(message = "Valor da transação não pode ser menor que zero.")
         @NotNull(message = "O tipo da transação é obrigatório.")
         TipoTransacao tipo,
 
