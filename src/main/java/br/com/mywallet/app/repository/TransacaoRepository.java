@@ -16,16 +16,15 @@ import java.util.List;
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     // busca as transações de um usuário
-    // O JpaRepository já sabe lidar com Pageable magicamente!
     Page<Transacao> findByUsuarioId(Long usuarioId, Pageable pageable);
-    List<Transacao> findByUsuarioIdOrderByDataDesc(Long usuarioId, Pageable pageable);
-    List<Transacao> findByUsuarioIdOrderByValorDesc(Long usuarioId, Pageable pageable);
-    List<Transacao> findByUsuarioIdOrderByValorAsc(Long usuarioId, Pageable pageable);
+    Page<Transacao> findByUsuarioIdOrderByDataDesc(Long usuarioId, Pageable pageable);
+    Page<Transacao> findByUsuarioIdOrderByValorDesc(Long usuarioId, Pageable pageable);
+    Page<Transacao> findByUsuarioIdOrderByValorAsc(Long usuarioId, Pageable pageable);
 
     // filtra as transações por tipo (receitas e despesas)
-    List<Transacao> findByUsuarioIdAndTipo(Long usuarioId, TipoTransacao tipo);
+    Page<Transacao> findByUsuarioIdAndTipo(Long usuarioId, TipoTransacao tipo, Pageable pageable);
     // filtra as transações por categoria
-    List<Transacao> findByUsuarioIdAndCategoria(Long usuarioId, Categoria categoria);
+    Page<Transacao> findByUsuarioIdAndCategoria(Long usuarioId, Categoria categoria, Pageable pageable);
 
     // Calcula o total de um tipo (ex: Total de RECEITAS) para um usuário
     // COALESCE(SUM(t.valor), 0): Se a soma for null (sem transações), retorna 0.
