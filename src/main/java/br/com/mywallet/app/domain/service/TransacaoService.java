@@ -67,4 +67,14 @@ public class TransacaoService {
                 t.getTipo()
         ));
     }
+
+    @Transactional
+    public void excluir(Long transacaoId, Usuario usuarioLogado) {
+
+        if (!repository.existsByIdAndUsuarioId(transacaoId, usuarioLogado.getId())) {
+            throw new ResourceNotFoundException("Transação com id " + transacaoId + " não foi encontrada para o usuário " + usuarioLogado.getEmail() + ".");
+        }
+
+        repository.deleteTransacaoById(transacaoId);
+    }
 }

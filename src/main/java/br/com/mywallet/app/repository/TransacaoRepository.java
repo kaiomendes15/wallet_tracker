@@ -31,4 +31,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     @Query("SELECT COALESCE(SUM(t.valor), 0) FROM Transacao t WHERE t.usuario.id = :usuarioId AND t.tipo = :tipo")
     Double calcularTotalPorTipo(@Param("usuarioId") Long usuarioId, @Param("tipo") TipoTransacao tipo);
 
+    boolean existsByIdAndUsuarioId(Long id, Long usuarioId);
+
+    void deleteTransacaoById(Long id);
 }

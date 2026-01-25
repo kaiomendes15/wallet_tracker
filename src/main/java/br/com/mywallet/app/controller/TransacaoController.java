@@ -35,7 +35,7 @@ public class TransacaoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(novaTransacao);
     }
 
-    // Não preciso ter uma rota para cada filtro. Posso deixar a função de filtragem contida na URL da rota. Assim, o
+    // Não precisa ter uma rota para cada filtro. Posso deixar a função de filtragem contida na URL da rota. Assim, o
     // frontend é responsável por realizar o filtro
     // exemplo: Receitas de Janeiro ordenadas por valor => {{baseUrl}}/transacoes?page=0&size=10&tipo=RECEITA&mes=1&sort=valor,desc
     @GetMapping
@@ -52,5 +52,17 @@ public class TransacaoController {
         Page<TransacaoResponseDTO> pagina = transacaoService.listarTransacoes(usuario, paginacao);
 
         return ResponseEntity.ok(pagina);
+    }
+
+    @DeleteMapping("/{transacaoId}")
+    public ResponseEntity excluirTransacao(
+            @PathVariable Long transacaoId,
+            Authentication authentication
+    ) {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+
+        transacaoService.excluir(transacaoId, usuario);
+
+        return ResponseEntity.noContent().build();
     }
 }
