@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
@@ -34,4 +35,6 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     boolean existsByIdAndUsuarioId(Long id, Long usuarioId);
 
     void deleteTransacaoById(Long id);
+
+    Optional<Transacao> findTransacaoByIdAndUsuarioId(Long id, Long usuarioId);
 }
