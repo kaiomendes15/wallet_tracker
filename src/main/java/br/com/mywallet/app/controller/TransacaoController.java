@@ -65,4 +65,18 @@ public class TransacaoController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{transacaoId}")
+    public ResponseEntity<TransacaoResponseDTO> atualizar(
+            @RequestBody @Valid TransacaoRequestDTO updatedData,
+            Authentication authentication,
+            @PathVariable Long transacaoId
+    ) {
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+
+        TransacaoResponseDTO transacaoAtualizada = transacaoService.atualizarTransacao(usuario, transacaoId,
+                updatedData);
+
+        return ResponseEntity.ok(transacaoAtualizada);
+    }
 }
