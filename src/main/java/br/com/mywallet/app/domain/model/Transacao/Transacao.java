@@ -47,14 +47,12 @@ public class Transacao {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
-    // Padrão builder para evitar repetição na hora de transformar o dto na entidade.
-    public Transacao(TransacaoRequestDTO dados, Usuario usuario, Categoria categoria) {
-        this.descricao = dados.descricao();
-        this.valor = dados.valor();
-        this.data = dados.data();
-        this.tipo = dados.tipo();
-        this.usuario = usuario;
-        this.categoria = categoria;
+    public void atualizarDados(TransacaoRequestDTO dto, Categoria categoria) {
+        setCategoria(categoria);
+        setTipo(dto.tipo());
+        setData(dto.data());
+        setValor(dto.valor());
+        setDescricao(dto.descricao());
     }
 
 }
