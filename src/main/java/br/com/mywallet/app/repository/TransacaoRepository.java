@@ -2,6 +2,7 @@ package br.com.mywallet.app.repository;
 
 import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Dashboard.DashboardResponseDTO;
+import br.com.mywallet.app.domain.model.Dashboard.GastosPorCategoriaDTO;
 import br.com.mywallet.app.domain.model.Transacao.Transacao;
 import br.com.mywallet.app.domain.enums.TipoTransacao;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
@@ -51,6 +52,24 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
         AND t.data BETWEEN :dataInicio AND :dataFim
     """)
     DashboardResponseDTO buscarDashboard(
+            @Param("usuarioId") Long usuarioId,
+            @Param("dataInicio") LocalDate dataInicio,
+            @Param("dataFim") LocalDate dataFim
+    );
+
+    @Query("""
+    SELECT new br.com.mywallet.app.domain.model.Dashboard.GastosPorCategoriaDTO(
+        t.categoria.titulo,
+        SUM(t.valor)
+    )
+    FROM Transacao t
+    WHERE t.usuario.id = :usuarioId
+    AND t.data BETWEEN :dataInicio AND :dataFim
+    AND t.tipo = 'DESPESA'
+    GROUP BY t.categoria.titulo
+    ORDER BY SUM(t.valor) DESC
+""")
+    List<GastosPorCategoriaDTO> buscarGastosPorCategoria(
             @Param("usuarioId") Long usuarioId,
             @Param("dataInicio") LocalDate dataInicio,
             @Param("dataFim") LocalDate dataFim
