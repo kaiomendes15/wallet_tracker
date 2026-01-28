@@ -41,7 +41,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
     Optional<Transacao> findTransacaoByIdAndUsuarioId(Long id, Long usuarioId);
 
     @Query("""
-        SELECT new DashboardResponseDTO(
+        SELECT new br.com.mywallet.app.domain.model.Dashboard.DashboardResponseDTO(
             SUM(CASE WHEN t.tipo = 'RECEITA' THEN t.valor ELSE 0 END),
             SUM(CASE WHEN t.tipo = 'DESPESA' THEN t.valor ELSE 0 END),
             SUM(CASE WHEN t.tipo = 'RECEITA' THEN t.valor ELSE -t.valor END)
