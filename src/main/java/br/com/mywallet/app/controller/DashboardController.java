@@ -36,7 +36,7 @@ public class DashboardController {
     }
 
     @GetMapping("/gastos-por-categoria")
-    public ResponseEntity<List<GastosPorCategoriaDTO>> getGastosPorCategoria(
+    public ResponseEntity<List<GastosPorCategoriaDTO>> receberGastosPorCategoria(
             Authentication authentication,
             @RequestParam(required = false) LocalDate inicio,
             @RequestParam(required = false) LocalDate fim
