@@ -25,8 +25,8 @@ public class DashboardService {
             fim = hoje.withDayOfMonth(hoje.lengthOfMonth()); // Último dia do mês
         }
 
-        if (inicio.isAfter(fim) || fim.isBefore(inicio)) {
-            throw new RegraDeNegocioException("Datas para inicio e/ou fim são inválidas.");
+        if (inicio.isAfter(fim)) {
+            throw new RegraDeNegocioException("A data de início não pode ser posterior à data fim.");
         }
 
         return transacaoRepository.buscarDashboard(usuario.getId(), inicio, fim);
