@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static br.com.mywallet.app.domain.model.Categoria.CategoriaMapper.categoriaParaDto;
+
 @Service
 @RequiredArgsConstructor
 public class CategoriaService {
@@ -34,13 +36,15 @@ public class CategoriaService {
 
         validarNomeDuplicado(data.titulo(), usuarioLogado.getId());
 
-        Categoria novaCategoria = new Categoria();
-        novaCategoria.setTitulo(data.titulo());
-        novaCategoria.setUsuario(usuarioLogado);
+        Categoria novaCategoria = Categoria.builder()
+                .titulo(data.titulo())
+                .tipo(data.tipo())
+                .usuario(usuarioLogado)
+                .build();
 
         Categoria categoriaSalva = categoriaRepository.save(novaCategoria);
 
-        return new CategoriaResponseDTO(categoriaSalva.getId(), categoriaSalva.getTitulo(), categoriaSalva.getTipo());
+        return categoriaParaDto(categoriaSalva);
     }
 
     public CategoriaResponseDTO atualizarCategoria(CategoriaRequestDTO updatedData, Usuario usuarioLogado, Long categoriaId) {
