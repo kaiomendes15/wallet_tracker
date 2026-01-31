@@ -1,8 +1,10 @@
 package br.com.mywallet.app.domain.service;
 
+import br.com.mywallet.app.domain.exceptions.RegraDeNegocioException;
 import br.com.mywallet.app.domain.exceptions.ResourceNotFoundException;
 import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import br.com.mywallet.app.domain.model.Transacao.Transacao;
+import br.com.mywallet.app.domain.model.Transacao.TransacaoMapper;
 import br.com.mywallet.app.domain.model.Transacao.TransacaoRequestDTO;
 import br.com.mywallet.app.domain.model.Transacao.TransacaoResponseDTO;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
@@ -29,6 +31,12 @@ public class TransacaoService {
         Categoria categoria = categoriaRepository.findCategoriaByIdAndUsuarioId(data.categoriaId(), usuarioLogado.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada para o usuário."));
 
+        if (categoria.getTipo() != data.tipo()) {
+            throw new RegraDeNegocioException(
+                    "A categoria " + categoria.getTitulo() + " não aceita lançamentos do tipo " + data.tipo()
+            );
+        }
+
         // Design Pattern: Builder
         Transacao novaTransacao = Transacao.builder()
                 .descricao(data.descricao())
@@ -42,14 +50,7 @@ public class TransacaoService {
 
         Transacao transacaoSalva = repository.save(novaTransacao);
 
-        return new TransacaoResponseDTO(
-                transacaoSalva.getId(),
-                transacaoSalva.getData(),
-                transacaoSalva.getDescricao(),
-                transacaoSalva.getValor(),
-                transacaoSalva.getCategoria().getTitulo(),
-                transacaoSalva.getTipo()
-        );
+        return transacaoParaDto(transacaoSalva);
     }
 
     @Transactional(readOnly = true)
@@ -57,14 +58,7 @@ public class TransacaoService {
         Page<Transacao> paginaTransacoes = repository.findByUsuarioId(usuarioLogado.getId(), paginacao);
 
 
-        return paginaTransacoes.map(t -> new TransacaoResponseDTO(
-                t.getId(),
-                t.getData(),
-                t.getDescricao(),
-                t.getValor(),
-                t.getCategoria().getTitulo(),
-                t.getTipo()
-        ));
+        return paginaTransacoes.map(TransacaoMapper::transacaoParaDto);
     }
 
     @Transactional
