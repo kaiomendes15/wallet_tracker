@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,18 +75,17 @@ public class CategoriaService {
     }
 
     public void criarCategoriasPadrao(Usuario usuario) {
-        List<Categoria> padroes = new ArrayList<>();
+        List<String> nomes = List.of("Alimentação", "Transporte", "Lazer", "Contas Fixas", "Salário");
 
-        // Receitas
-        padroes.add(criar("Salário", TipoTransacao.RECEITA, usuario));
-        padroes.add(criar("Investimentos", TipoTransacao.RECEITA, usuario));
+        List<Categoria> categoriasPadrao = nomes.stream()
+                .map(nome -> Categoria.builder()
+                        .titulo(nome)
+                        .usuario(usuario)
+                        .tipo(nome.equals("Salário") ? TipoTransacao.RECEITA : TipoTransacao.DESPESA)
+                        .build())
+                .collect(Collectors.toList());
 
-        // Despesas
-        padroes.add(criar("Alimentação", TipoTransacao.DESPESA, usuario));
-        padroes.add(criar("Lazer", TipoTransacao.DESPESA, usuario));
-        padroes.add(criar("Moradia", TipoTransacao.DESPESA, usuario));
-
-        categoriaRepository.saveAll(padroes);
+        categoriaRepository.saveAll(categoriasPadrao);
     }
 
     private Categoria criar(String titulo, TipoTransacao tipo, Usuario usuario) {
