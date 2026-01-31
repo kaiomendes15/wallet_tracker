@@ -1,7 +1,9 @@
 package br.com.mywallet.app.domain.model.Categoria;
 
+import br.com.mywallet.app.domain.enums.TipoTransacao;
 import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +23,8 @@ public class Categoria {
 
     @Column(nullable = false)
     private String titulo;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private TipoTransacao tipo;
 }
