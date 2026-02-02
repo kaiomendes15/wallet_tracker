@@ -52,7 +52,6 @@ public class TransacaoService {
 
         return transacaoParaDto(transacaoSalva);
     }
-
     @Transactional(readOnly = true)
     public Page<TransacaoResponseDTO> listarTransacoes(Usuario usuarioLogado, Pageable paginacao) {
         Page<Transacao> paginaTransacoes = repository.findByUsuarioId(usuarioLogado.getId(), paginacao);
