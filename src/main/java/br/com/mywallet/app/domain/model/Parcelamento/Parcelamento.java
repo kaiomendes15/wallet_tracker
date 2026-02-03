@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,8 @@ public class Parcelamento {
 
     @NotNull(message = "O valor total é obrigatório.")
     @Positive
-    private Double valorTotal; // Ex: 1200.00
+    @Column(precision = 19, scale = 2) // 19 dígitos no total, 2 decimais (ex: 123.45)
+    private BigDecimal valorTotal;// Ex: 1200.00
 
     @NotNull(message = "A quantidade de parcelas é obrigatória.")
     @Positive

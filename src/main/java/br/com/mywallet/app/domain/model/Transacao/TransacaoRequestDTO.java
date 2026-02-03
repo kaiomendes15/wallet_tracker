@@ -5,6 +5,7 @@ import br.com.mywallet.app.domain.model.Categoria.Categoria;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record TransacaoRequestDTO(
@@ -13,7 +14,7 @@ public record TransacaoRequestDTO(
 
         @NotNull(message = "O valor é obrigatório.")
         @Positive(message = "Valor da transação não pode ser menor que zero.")
-        Double valor,
+        BigDecimal valor,
 
         @NotNull(message = "A data é obrigatória.")
         @PastOrPresent(message = "A data não pode ser futura.")
@@ -31,7 +32,7 @@ public record TransacaoRequestDTO(
         Integer totalParcelas
 ) {
 
-        public Integer getTotalRepeticoes() {
+        public Integer getTotalParcelas() {
                 return totalParcelas == null ? 1 : totalParcelas;
         }
 }

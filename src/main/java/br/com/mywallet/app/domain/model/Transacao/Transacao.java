@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -32,7 +33,8 @@ public class Transacao {
 
     @NotNull(message = "O valor é obrigatório.")
     @Positive(message = "O valor deve ser positivo.")
-    private Double valor;
+    @Column(precision = 19, scale = 2) // 19 dígitos no total, 2 decimais (ex: 123.45)
+    private BigDecimal valor;
 
     @NotNull(message = "A data é obrigatória.")
     // Se mantiver @PastOrPresent, vai dar erro ao criar parcelas para o mês que vem.
