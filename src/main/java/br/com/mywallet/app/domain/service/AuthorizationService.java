@@ -18,12 +18,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorizationService implements UserDetailsService {
-    @Autowired
-    UsuarioRepository repository;
+
+    private final UsuarioRepository repository;
+    private final CategoriaService categoriaService;
 
     private final ApplicationContext context; // Truque sênior para pegar o AuthManager sem ciclo
     private final TokenService tokenService;
@@ -54,29 +56,28 @@ public class AuthorizationService implements UserDetailsService {
         return new AuthenticationResponseDTO(token, usuarioAutenticado.getId());
     }
 
+    @Transactional
     public void register(RegisterDTO data) {
-        // 1. Validação de Regra de Negócio (Unicidade)
         if (this.repository.findByEmail(data.email()) != null) {
             throw new RegraDeNegocioException("Este e-mail já está cadastrado.");
         }
 
-        // 2. Regra de Negócio (Definição de Role)
-        UserRole role = UserRole.USER;
-        if (data.email().endsWith("@admin.br")) { // Melhor usar endsWith do que contains para segurança
-            role = UserRole.ADMIN;
-        }
+        // (Definição de Role)
+        UserRole role = data.email().endsWith("@admin.br") ? UserRole.ADMIN : UserRole.USER;
 
         // 3. Criptografia
         String encryptedPassword = passwordEncoder.encode(data.senha());
 
         // 4. Persistência
-        Usuario newUser = new Usuario(
-                data.nome(),
-                data.email(),
-                encryptedPassword,
-                role
-        );
+        Usuario newUser = Usuario.builder()
+                .nome(data.nome())
+                .email(data.email())
+                .hashSenha(encryptedPassword)
+                .role(role)
+                .build();
 
-        this.repository.save(newUser);
+        Usuario novoUsuario = this.repository.save(newUser);
+
+        categoriaService.criarCategoriasPadrao(novoUsuario);
     }
 }

@@ -1,8 +1,9 @@
 package br.com.mywallet.app.domain.model.Transacao;
 
-import br.com.mywallet.app.domain.model.Categoria.Categoria;
-import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import br.com.mywallet.app.domain.enums.TipoTransacao;
+import br.com.mywallet.app.domain.model.Categoria.Categoria;
+import br.com.mywallet.app.domain.model.Parcelamento.Parcelamento;
+import br.com.mywallet.app.domain.model.Usuario.Usuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -21,23 +23,34 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class Transacao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "A descrição é obrigatória.") // NotBlank se for String
+
+    @NotBlank(message = "A descrição é obrigatória.")
     private String descricao;
 
     @NotNull(message = "O valor é obrigatório.")
     @Positive(message = "O valor deve ser positivo.")
-    private Double valor;
+    @Column(precision = 19, scale = 2) // 19 dígitos no total, 2 decimais (ex: 123.45)
+    private BigDecimal valor;
 
     @NotNull(message = "A data é obrigatória.")
-    @PastOrPresent(message = "A data não pode ser futura.") // Regra de negócio via Bean Validation
+    // Se mantiver @PastOrPresent, vai dar erro ao criar parcelas para o mês que vem.
     private LocalDate data;
 
     @NotNull(message = "O tipo da transação é obrigatório.")
-    @Enumerated(EnumType.STRING) // Grava "RECEITA" no banco em vez de 0 ou 1
+    @Enumerated(EnumType.STRING)
     private TipoTransacao tipo;
+
+    // Se for compra única, salvar como 1.
+    private Integer parcelaAtual;
+
+    // Se for compra única, salvar como 1.
+    private Integer totalParcelas;
+
+    // --- RELACIONAMENTOS ---
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id", nullable = false)
@@ -47,6 +60,11 @@ public class Transacao {
     @JoinColumn(name = "categoria_id", nullable = false)
     private Categoria categoria;
 
+    // Se for null, é uma transação avulsa.
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parcelamento_id", nullable = true)
+    private Parcelamento parcelamento;
+
     public void atualizarDados(TransacaoRequestDTO dto, Categoria categoria) {
         setCategoria(categoria);
         setTipo(dto.tipo());
@@ -54,5 +72,4 @@ public class Transacao {
         setValor(dto.valor());
         setDescricao(dto.descricao());
     }
-
 }
